@@ -1,2 +1,7 @@
-# codefuture-server
-codefuture-server
+# codefuture
+
+## Command
+```
+yarn install
+yarn start
+```

@@ -11,7 +11,7 @@ import router from 'routes';
 
 (async () => {
   try {
-    await db.sync({});
+    await db.sync({ force: true });
     console.info('Database connected');
   } catch (err) {
     console.error(err);

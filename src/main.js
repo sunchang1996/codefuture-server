@@ -7,11 +7,13 @@ import config from 'config';
 import db from 'db';
 import errorHandle from 'middleware/errorHandle';
 import router from 'routes';
+import { initUser } from 'server/user';
 
 
 (async () => {
   try {
     await db.sync({ force: true });
+    await initUser();
     console.info('Database connected');
   } catch (err) {
     console.error(err);

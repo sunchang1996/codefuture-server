@@ -113,4 +113,19 @@ export default class UserRouter {
 
     ctx.body = { msg: '上传成功', user };
   }
+
+  @request('put', '/user/password')
+  @tag
+  @summary('修改用户密码')
+  @body({
+    password: { type: 'string', required: true, description: '修改用户密码' }
+  })
+  static async changePassword(ctx) {
+    const { password } = ctx.validatedBody;
+    ctx.user.passwordHash = sha1(password);
+
+    await ctx.user.save();
+
+    ctx.body = { msg: '修改成功' };
+  }
 }

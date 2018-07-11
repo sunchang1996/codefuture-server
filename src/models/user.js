@@ -11,13 +11,27 @@ const User = db.define(
     studentId: { type: Sequelize.STRING },
     avatar: {
       type: Sequelize.STRING,
-      // defaultValue() {
-      //   return `${config.baseUrl}`
-      // }
+      defaultValue: `${config.baseUrl}/src/images/default.jpg`
     },
     nickname: { type: Sequelize.STRING },
     address: { type: Sequelize.STRING },
-    gender: { type: Sequelize.STRING },
+    gender: {
+      type: Sequelize.ENUM,
+      values: ['0', '1'],
+      get() {
+        if (this.getDataValue('gender') === '0') {
+          return '女';
+        }
+        return '男';
+      },
+      set(value) {
+        if (value === '男') {
+          this.setDataValue('gender', '1');
+        } else {
+          this.setDataValue('gender', '0');
+        }
+      }
+    },
     age: { type: Sequelize.INTEGER },
     QQ: { type: Sequelize.STRING },
     passwordHash: { type: Sequelize.STRING },

@@ -12,7 +12,8 @@ import { initUser } from 'server/user';
 
 (async () => {
   try {
-    await db.sync({ force: true });
+    // await db.sync({ force: true });
+    await db.sync({});
     await initUser();
     console.info('Database connected');
   } catch (err) {

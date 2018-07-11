@@ -29,6 +29,13 @@ export default class UserRouter {
     ctx.body = { user };
   }
 
+  @request('get', '/user/me')
+  @tag
+  @summary('获取当前用户信息')
+  static async getCurrentUser(ctx) {
+    ctx.body = { user: ctx.user };
+  }
+
   @request('post', '/user/login')
   @tag
   @summary('用户登录')

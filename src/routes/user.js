@@ -40,8 +40,8 @@ export default class UserRouter {
   @tag
   @summary('用户登录')
   @body({
-    studentId: { type: 'string', required: true, description: '用户的学生号'},
-    password: { type: 'string', required: true, description: '用户密码'}
+    studentId: { type: 'string', required: true, description: '用户的学生号' },
+    password: { type: 'string', required: true, description: '用户密码' }
   })
   @middlewares([assertUserExists])
   static async login(ctx) {
@@ -53,6 +53,32 @@ export default class UserRouter {
 
     user.token = generateToken();
     await user.save();
+    ctx.body = { user };
+  }
+
+  @request('post', '/user/edit')
+  @tag
+  @summary('编辑用户信息')
+  @body({
+    nickname: { type: 'string', description: '昵称' },
+    address: { type: 'string', description: '地址' },
+    gender: { type: 'string', description: '性别' },
+    age: { type: 'number', description: '设置年龄' },
+    QQ: { type: 'string', description: '设置QQ' }
+  })
+  static async editUser(ctx) {
+    const data = ctx.validatedBody;
+    const user = ctx.user;
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const element = data[key];
+        if (element) {
+          user[key] = element;
+        }
+      }
+    }
+    user.save();
     ctx.body = { user };
   }
 }

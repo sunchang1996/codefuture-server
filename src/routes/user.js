@@ -1,13 +1,27 @@
 import sha1 from 'sha1';
 import User from 'models/user';
-import Koa from 'koa';
-import { request, summary, body, tags, query, middlewares } from 'koa-swagger-decorator';
+import multer from 'koa-multer';
+import _path from 'path';
+import { request, summary, body, tags, formData, middlewares } from 'koa-swagger-decorator';
 
 import generateToken from 'utils/generateToken';
 import exception from 'class/exception';
 import assertUserExists from 'middleware/user/assertUserExists';
+import config from '../config';
 
 const tag = tags(['User']);
+
+const userStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, _path.resolve('src/images/'));
+  },
+  filename: (req, file, cb) => {
+    const { name, ext } = _path.parse(file.originalname);
+    cb(null, `${name}_${Date.now()}${ext}`);
+  }
+});
+
+const userUpload = multer({ storage: userStorage });
 
 export default class UserRouter {
   @request('post', '/user/register')
@@ -56,7 +70,7 @@ export default class UserRouter {
     ctx.body = { user };
   }
 
-  @request('post', '/user/edit')
+  @request('put', '/user/edit')
   @tag
   @summary('编辑用户信息')
   @body({
@@ -80,5 +94,23 @@ export default class UserRouter {
     }
     user.save();
     ctx.body = { user };
+  }
+
+  @request('post', '/user/avatar')
+  @tag
+  @summary('上传头像')
+  @formData({
+    file: { type: 'file', required: true, description: '头像文件' }
+  })
+  @middlewares([userUpload.single('file')])
+  static async uploadAvatar(ctx) {
+    const { file } = ctx.req;
+    const user = ctx.user;
+
+    await user.update({
+      avatar: `${config.baseUrl}/src/images/${file.filename}`
+    });
+
+    ctx.body = { msg: '上传成功', user };
   }
 }

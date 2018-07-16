@@ -13,7 +13,8 @@ const User = db.define(
       type: Sequelize.STRING,
       defaultValue: `${config.baseUrl}/src/images/default.jpg`
     },
-    nickname: { type: Sequelize.STRING },
+    nickname: { type: Sequelize.STRING }, // 昵称
+    name: { type: Sequelize.STRING }, // 学名
     address: { type: Sequelize.STRING },
     gender: {
       type: Sequelize.ENUM,

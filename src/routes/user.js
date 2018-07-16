@@ -75,6 +75,7 @@ export default class UserRouter {
   @summary('编辑用户信息')
   @body({
     nickname: { type: 'string', description: '昵称' },
+    name: { type: 'string', description: '学名' },
     address: { type: 'string', description: '地址' },
     gender: { type: 'string', description: '性别' },
     age: { type: 'number', description: '设置年龄' },
@@ -111,7 +112,7 @@ export default class UserRouter {
       avatar: `${config.baseUrl}/src/images/${file.filename}`
     });
 
-    ctx.body = { msg: '上传成功', user };
+    ctx.body = { msg: '上传成功' };
   }
 
   @request('put', '/user/password')

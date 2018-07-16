@@ -13,6 +13,7 @@ export async function initUser(password = '1234567890') {
     nickname: 'achang',
     address: '中国',
     gender: '男',
+    name: '阿畅',
     age: 18,
     QQ: 123456789,
     passwordHash: sha1(password),
